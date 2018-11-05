@@ -8,7 +8,7 @@ Abaqus input files, ending with the extension <i>*.inp</i>, describe the model a
 
 2. Prepare the submission script, which is the script that is submitted to the Slurm scheduler in order to run the Abaqus job. This repository provides the script <i>job.sh</i> as an example.
 
-Because the Abaqus job results in many output files, a new directory is created in the <i>job.sh</i> script in order to organize the output files into one central location. 
+Because the Abaqus job results in many output files, a new directory is created in /data to store the output data in. As well, a new directory is created in /local to run the job in, which is removed at the end of the job.
 
 3. Submit the job using
         `sbatch job.sh`

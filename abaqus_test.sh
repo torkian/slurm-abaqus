@@ -7,33 +7,44 @@
 
 ## this example simulates the impact of a tennis ball onto a racket 
 
-## creates a directory to throw all the files in, since there are a lot
-dir=abaqus_test$SLURM_JOB_ID
-mkdir $dir
+## creates a directory to throw all the files in located in /data, creates directory in /local to run the job in
+fdir=abaqus_test$SLURM_JOB_ID
+resultsDir=/data/userdata/$USER/$fdir
+mkdir /local/$fdir
+mkdir $resultsDir
 
-## error checking to confirm necessary files exist
-## if not, fetch them from abaqus
-if [ ! -e "tennis_surfcav.inp" ]; then
-        abaqus fetch job=tennis_surfcav.inp
-fi
+scratchDir=/local
 
-if [ ! -e "tennis_ef1.inp" ]; then
-        abaqus fetch job=tennis_ef1.inp
-fi
+## initializes locations of inFile and paramFile to be copied to local later
+inFile=/data/userdata/holdeman/abaqus-examples/tennis_surfcav.inp
+paramFile="/data/userdata/holdeman/abaqus-examples/tennis_ef1.inp /data/userdata/holdeman/abaqus-examples/tennis_ef2.inp"
+## change into local directory where results file will be stored temp
+cd /local/$fdir
 
-if [ ! -e "tennis_ef2.inp" ]; then
-        abaqus fetch job=tennis_ef2.inp
-fi
-
-## move these files into the new directory
-cp tennis_surfcav.inp tennis_ef1.inp tennis_ef2.inp $dir 
-
-## opens that directory
-cd $dir
+## copy over input file from home directory
+cp $inFile .
+## copy over param files
+for f in $paramFile
+do
+        cp $f .
+done
 
 ## loads the matlab module
 module load abaqus
 ## runs the abaqus job, giving it the name testP and using the tennis_surfcav file
-abaqus job=aba_test input=tennis_surfcav.inp interactive
+time abaqus job=aba_test \
+            scratch=$scratchDir \
+            cpus=$SLURM_JOB_CPUS_PER_NODE \
+            mp_mode=THREADS \
+            parallel=domain \
+            input=$inFile interactive
+
+## copys the results to the created results directory
+cp -r * $resultsDir/
+
+## removes the results from local
+rm *
+cd /local
+rmdir $fdir
 
 echo 'done'
