@@ -1,1 +1,1 @@
-# slurm-abaquc
+# slurm-abaqus
