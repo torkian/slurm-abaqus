@@ -1,4 +1,4 @@
-## Running Abaqus
+
 
 Abaqus is a finite element analysis software used for engineering simulations. Here is a demonstration of running an Abaqus example problem through a batch script, adapted from the Abaqus example provided in the documentation [here](http://ivt-abaqusdoc.ivt.ntnu.no:2080/v6.14/books/exa/default.htm?startat=ch01s01aex01.html). 
 
@@ -14,3 +14,4 @@ Because the Abaqus job results in many output files, a new directory is created 
         `sbatch job.sh`
 
 4. Examine the results by opening the new directory, <i>abaqus_test</i>. More information about what each file contains can be found in the [Abaqus User’s Manual](https://www.sharcnet.ca/Software/Abaqus610/Documentation/docs/v6.10/books/usb/default.htm?startat=pt01ch03s06aus34.html)
+
